@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* CSS embutido. O ideal no futuro é mover para o seu arquivo .css na pasta static */
+    
+    /* Wrapper para centralizar apenas o conteúdo, respeitando o header/footer do base.html */
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh; 
+        background-color: transparent; /* Puxa o fundo do base.html */
+    }
+
+    .login-container {
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-container h2 {
+        text-align: center;
+        color: #333333;
+        margin-bottom: 30px;
+        font-size: 24px;
+    }
+
+    /* Campos do Formulário */
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        color: #555555;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* Estiliza automaticamente os inputs gerados pelo Django */
+    .input-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cccccc;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+        border-color: #007bff;
+    }
+
+    /* Botão */
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    .login-btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo para as mensagens de erro/sucesso do Django */
+    .alertas {
+        margin-bottom: 20px;
+    }
+    .alertas p {
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        text-align: center;
+    }
+    .alerta-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .alerta-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+</style>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <h2>Acesse sua conta</h2>
+
+        {% if messages %}
+        <div class="alertas">
+            {% for message in messages %}
+                <p class="alerta-{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in login_form %}
+                <div class="input-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="login-btn">Entrar</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

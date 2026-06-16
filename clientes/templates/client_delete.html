@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+    /* Container que alinha os botões na horizontal */
+    .buttons-container {
+        display: flex;
+        gap: 15px; /* Espaço entre os botões */
+        margin-top: 10px;
+    }
+
+    /* Base compartilhada para ambos os botões ficarem do mesmo tamanho */
+    .btn-submit, 
+    .btn-cancel {
+        flex: 0.2; /* Faz cada botão ocupar 50% do espaço */
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none; /* Tira o sublinhado do link <a> do cancelar */
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+
+    /* Botão de Envio/Alterar (Azul) */
+    .btn-submit {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+
+    /* Botão de Cancelar (Fundo branco, texto e borda vermelha) */
+    .btn-cancel {
+        background-color: #ffffff;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+    .btn-cancel:hover {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+</style>
+
+
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">Deletar cliente</h1>
+    </div>
+    <div class="card-body">
+      <p>Tem certeza que deseja deletar o cliente <strong>{{ object.company_name }}</strong>?</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="buttons-container">
+          <button type="submit" class="btn-submit">Deletar Cliente</button>
+          <a href="{% url 'client_update' pk=object.pk %}" class="btn-cancel">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

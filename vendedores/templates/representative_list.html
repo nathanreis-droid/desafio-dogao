@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Container principal da página */
+    .list-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Topo: Título e Barra de Busca lado a lado */
+    .list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .list-header h1 {
+        color: #333333;
+        font-size: 28px;
+    }
+
+    /* Estilo do Formulário de Busca (Mesmo visual dos inputs de login) */
+    .search-form {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .search-form input {
+        flex: 1;
+        padding: 10px 15px;
+        border: 1px solid #cccccc;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .search-form input:focus {
+        border-color: #007bff;
+    }
+
+    .search-form button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .search-form button:hover {
+        background-color: #0056b3;
+    }
+
+    /* CSS Grid: Faz os cards se arrumarem sozinhos e ficarem responsivos */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    /* O Card de cada representativee (Mesma pegada da caixinha de login) */
+    .representative-card {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra mais suave */
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Efeito de flutuar ao passar o mouse */
+    .representative-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .representative-card h2 {
+        color: #333333;
+        font-size: 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f0f2f5;
+        padding-bottom: 10px;
+    }
+
+    .representative-card p {
+        color: #555555;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    /* Deixa o negrito (Email:, Tipo:) mais sutil */
+    .representative-card strong {
+        color: #333333;
+        font-weight: 600;
+    }
+
+    /* Container dos botões no final do card */
+    .buttons-container {
+        display: flex;
+        gap: 10px;
+        margin-top: auto; /* Empurra os botões lá pro final do card sempre */
+        padding-top: 20px;
+    }
+
+    .buttons-container a {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    /* Botão de Editar (Azul) */
+    .btn-edit {
+        background-color: #e7f1ff;
+        color: #007bff;
+        border: 1px solid #b8daff;
+    }
+
+    .btn-edit:hover {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    /* Botão de Deletar (Vermelho invertido) */
+    .btn-delete {
+        background-color: #ffffff;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+    .btn-delete:hover {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    /* Mensagem quando não acha nada na busca */
+    .no-results {
+        text-align: center;
+        color: #777777;
+        font-size: 16px;
+        padding: 50px 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<div class="list-wrapper">
+    
+    <div class="list-header">
+        <h1>Lista de Vendedores</h1>
+        <form method="GET" action="{% url 'representative_list' %}" class="search-form">
+            <input type="text" name="search" placeholder="Buscar vendedores..." value="{{ request.GET.search }}">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    {% if representative_list %}
+        <div class="cards-grid">
+            {% for representative in representative_list %}
+                <div class="representative-card">
+                    <h2>{{ representative.name }}</h2>
+                    <p><strong>Email:</strong> {{ representative.email }}</p>
+                    <p><strong>Salario:</strong> {{ representative.salary }}</p>
+                    
+                    {% if representative.activate %}
+                      <p><strong>Status:</strong> Ativo </p>
+                    {% else %}
+                      <p><strong>Status:</strong> Bloqueado </p>
+                    {% endif %}
+            
+                    <p><strong>Nascimento:</strong> {{ representative.birth|date:"d/m/Y" }}</p>
+                    
+                    <div class="buttons-container">
+                        <a href="{% url 'representative_update' representative.pk %}" class="btn-edit">Editar</a>
+                        <a href="{% url 'representative_delete' representative.pk %}" class="btn-delete">Deletar</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-results">Nenhum representative encontrado.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
