@@ -148,7 +148,7 @@ env.bak/
 venv.bak/
 .env.*
 !.env.exemplo
-.vscode
+.vscode/
 vscode/
 # Spyder project settings
 .spyderproject
