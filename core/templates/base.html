@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
   <style>
+    /* SEUS ESTILOS ORIGINAIS */
     body {
         font-family: 'Open Sans', sans-serif;
         background-color: #f7f7f7;
@@ -40,6 +41,7 @@
         margin: 0;
         padding: 0;
         display: flex;
+        align-items: center; /* Garante que todos os itens fiquem alinhados */
     }
 
     nav ul li {
@@ -66,27 +68,123 @@
         background-color: #999;
     }
 
+    /* ESTILOS DA BOX DE OPÇÕES ADAPTADOS PARA A NAV */
+    .options-container {
+      position: relative;
+      width: 200px; /* Reduzido levemente para caber melhor no menu */
+      background: #0096c7;
+      border-radius: 8px;
+      margin: 0 10px; /* Espaçamento igual aos outros itens do menu */
+    }
+
+    .toggle-checkbox {
+      display: none;
+    }
+
+    .options-header {
+      display: flex;
+      {% comment %} justify-content: space-between; {% endcomment %}
+      justify-content: center; /* Centraliza os dois itens na box */
+      gap: 10px;
+      align-items: center;
+      padding: 10px 10px;
+      background-color: #0096c7;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .arrow {
+      font-size: 12px;
+      color: #ffffff;
+      transition: transform 0.3s ease;
+    }
+
+    /* Lista flutuante (Dropdown) */
+    .options-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out;
+      background-color: #ffffff;
+      position: absolute; /* Faz a box flutuar sobre o conteúdo */
+      top: 110%; /* Posiciona logo abaixo do botão */
+      left: 0;
+      width: 100%;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      z-index: 1000; /* Garante que fique por cima de tudo na main */
+    }
+
+    .option-item {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    /* Ajuste para os links DENTRO da box não pegarem o estilo branco da nav */
+    .option-item a {
+      color: #555 !important; 
+      font-size: 14px;
+      padding: 12px 15px !important;
+      width: 100%;
+      display: block;
+    }
+
+    .option-item a:hover {
+      background-color: #eef2ff !important; /* Cor de destaque ao passar o mouse */
+      color: #0096c7 !important;
+    }
+
+    .toggle-checkbox:checked ~ .options-list {
+      max-height: 200px; 
+      border-top: 1px solid #eee;
+    }
+
+    .toggle-checkbox:checked ~ .options-header .arrow {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
   <header>
     <nav>
       <ul>
-   
         {% if user.is_authenticated %}
           <li><a href="{% url 'client_list' %}">Cliente</a></li>     
           <li><a href="{% url 'client_new' %}">Cadastrar Cliente</a></li>     
           <li><a href="{% url 'representative_list' %}">Vendedor</a></li>     
           <li><a href="{% url 'representative_new' %}">Cadastrar Vendedor</a></li>  
-          <li><a href="{% url 'cliente_sicroniza' %}">Sicroniza</a></li>
-          <li><a href="{% url 'representative_sicroniza' %}">Sicroniza vendedor</a></li>
+          
+          <div class="options-container">
+            <input type="checkbox" id="toggle-options" class="toggle-checkbox">
+            <label for="toggle-options" class="options-header">
+              <span class="title">Sincronizar</span>
+              <span class="arrow">▼</span>
+            </label>
+            <ul class="options-list">
+              <li class="option-item">
+                <a href="{% url 'cliente_sicroniza' %}">Cliente</a>
+              </li>
+              <li class="option-item">
+                <a href="{% url 'representative_sicroniza' %}">Vendedor</a>
+              </li>
+            </ul>
+          </div>
+          
           <li><a href="{% url 'logout' %}">Sair</a></li>
         {% endif %}
-         {% if not user.is_authenticated %}
+        
+        {% if not user.is_authenticated %}
           <li><a href="{% url 'register' %}">Cadastre-se</a></li>
           <li><a href="{% url 'login' %}">Login</a></li>     
         {% endif %}
-
       </ul>
     </nav>
   </header>
