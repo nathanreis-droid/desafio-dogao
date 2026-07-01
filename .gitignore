@@ -1,0 +1,5 @@
+.venv/Scripts/idna.exe
+.venv/Scripts/normalizer.exe
+.vscode/launch.json
+db.sqlite3
+.env

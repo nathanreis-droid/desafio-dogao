@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from accounts.views import login_view, logout_view, register_view
 from clientes.views import ClientUpdateView, ClientCreateView,ClientDeleteView
-from clientes.views import ClientListView
-from vendedores.views import RepresentativeListView,RepresentativeUpdateView,RepresentativeCreateView,RepresentativeDeleteView
+from clientes.views import ClientListView,sicronize_view
+from vendedores.views import RepresentativeListView,RepresentativeUpdateView,RepresentativeCreateView,RepresentativeDeleteView, sicronize_representant_view
 urlpatterns = [
     
     path('admin/', admin.site.urls),
@@ -34,5 +34,7 @@ urlpatterns = [
     path('representative_new/', RepresentativeCreateView.as_view(), name='representative_new'),
     path('representative_update/<int:pk>/', RepresentativeUpdateView.as_view(), name='representative_update'),
     path('representative_delete/<int:pk>/', RepresentativeDeleteView.as_view(),name='representative_delete'),
+    path('cliente_sicroniza/', sicronize_view ,name='cliente_sicroniza'),
+    path('representative_sicroniza/', sicronize_representant_view ,name='representative_sicroniza'),
 
 ]

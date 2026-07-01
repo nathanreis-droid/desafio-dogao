@@ -2,17 +2,23 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "totvs_language_debug",
+			"name": "Python Django",
+			"type": "debugpy",
 			"request": "launch",
-			"name": "TOTVS Language Debug",
-			"program": "${command:AskForProgramName}",
-			"cwb": "${workspaceFolder}",
-			"smartclientBin": "../totvs/bin/smartclient/smartclient.exe",
-			"isMultiSession": true,
-			"enableTableSync": true,
-			"extendFeatures": {
-				"charDetails": false
-			}
+			"args": [
+				"runserver"
+			],
+			"django": true,
+			"autoStartBrowser": false,
+			"program": "${workspaceFolder}\\manage.py"
+		},
+		{
+			"name": "Python File",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${file}",
+			"console": "integratedTerminal",
+			"django": true
 		}
 	]
 }
